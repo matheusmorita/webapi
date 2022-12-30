@@ -1,0 +1,10 @@
+# render.yaml
+
+# O tipo de aplicativo que você está implantando
+type: "node"
+
+# O caminho para o arquivo principal do seu aplicativo
+entrypoint: "src/index.js"
+
+# A porta na qual o seu aplicativo estará ouvindo
+port: 3000
