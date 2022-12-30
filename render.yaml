@@ -1,21 +1,33 @@
-# render.yaml
-
-# O tipo de aplicativo que você está implantando
-type: "node"
-
-# O caminho para o arquivo principal do seu aplicativo
-entrypoint: "src/index.js"
-
-# A porta na qual o seu aplicativo estará ouvindo
-port: 3000
-
-# O plano gratuito do Render inclui até 550 horas de cálculo por mês
-resources:
-  memory: 256M
-  cpu: 256m
-
-# O plano gratuito do Render inclui até 10.000 requisições HTTP por hora
-max_requests_per_hour: 10000
-
-# O plano gratuito do Render inclui até 20 conexões de banco de dados por hora
-max_connections_per_hour: 20
+ervices:
+  # A Docker web service
+  - type: web
+    name: teste
+    env: docker
+    repo: https://github.com/render-examples/webdis.git # optional
+    region: oregon # optional (defaults to oregon)
+    plan: free # optional (defaults to starter)
+    branch: master # optional (defaults to master)
+    rootDir: webdis
+    dockerCommand: ./webdis.sh # optional (defaults to Dockerfile command)
+    numInstances: 3 # optional (defaults to 1)
+    healthCheckPath: /
+    envVars:
+      - key: REDIS_HOST
+        fromService:
+          type: redis
+          name: lightning
+          property: host # available properties are listed below
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: lightning
+          property: port
+      - fromGroup: conc-settings
+  # A Redis instance
+  - type: redis
+    name: lightning
+    ipAllowList: # required
+      - source: 0.0.0.0/0
+        description: everywhere
+    plan: free # optional (defaults to starter)
+    maxmemoryPolicy: noeviction # optional (defaults to allkeys-lru)
