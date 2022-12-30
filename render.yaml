@@ -25,7 +25,15 @@ services:
       - fromGroup: conc-settings
 
     autoDeploy: false # optional
-
+    
+    # A Redis instance
+      - type: redis
+        name: lightning
+        ipAllowList: # required
+          - source: 0.0.0.0/0
+            description: everywhere
+        plan: free # optional (defaults to starter)
+        maxmemoryPolicy: noeviction # optional (defaults to allkeys-lru)
 
 envVarGroups:
   - name: conc-settings
